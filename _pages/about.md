@@ -24,6 +24,10 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am a second year PhD student at the NYU Center for Data Science, advised by Yiqiu Shen and Carlos Fernandez-Granda. My current research interests center around multimodal learning and its application in cancer screening and early detection. 
+I am a second-year Ph.D. student at the [NYU Center for Data Science](https://cds.nyu.edu/), advised by [Yiqiu Shen](https://yiqiushen.github.io/) and [Carlos Fernandez-Granda](https://cfernandezgranda.github.io/).  
+My current research interests center around **multimodal learning** and its application in **cancer screening** and **early detection**.
 
-Prior to starting the PhD, I led product development as the CTO and co-founder of Tethys AI, a healthcare technology startup. I also holds an M.S. in Data Science from NYU and a B.S. in Engineering Physics from Cornell University. Outside of research, I enjoys scuba diving and sailing.
+Prior to starting the Ph.D., I led product development as the **CTO and co-founder** of [Tethys AI](https://www.tethys.ai/), a healthcare technology startup.  
+I also hold an **M.S. in Data Science** from [NYU](https://cds.nyu.edu/) and a **B.S. in Engineering Physics** from [Cornell University](https://www.engineering.cornell.edu/).
+
+Outside of research, I enjoy **scuba diving** and **sailing**.
