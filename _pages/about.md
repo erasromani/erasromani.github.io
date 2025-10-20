@@ -9,7 +9,7 @@ profile:
   image: prof_pic.jpg
   image_circular: true # crops the image to make it circular
   more_info: >
-    <p>CDS 224</p>
+    <p>224</p>
     <p>60 5th Ave</p>
     <p>New York, NY 10011</p>
 
