@@ -16,7 +16,7 @@ Patient data exist in structured and unstructured formats. Structured data typic
 
 ---
 
-## 1 Introduction
+## Introduction
 
 AI systems developed for breast cancer detection are evaluated at the population level and subgroup level. Subgroup analysis is used to understand the potential limitations of the AI systems and highlight unintended biases present in them. Patient subgroups can be categorized by age, breast tissue density, and clinical indication. While some subgroup categories like age are easy to extract from the electronic health record system, others like clinical indication are only available in unstructured formats and hence difficult to extract.
 
@@ -30,19 +30,19 @@ In this project, we develop a natural language processing system that classifies
 
 ---
 
-## 2 Related Work
+## Related Work
 
 Extensive work has been published on the application of NLP on clinical data. A detailed literature survey of application of NLP to radiology reports specifically was conducted in {% cite casey2021systematic --file references %} and {% cite pons2016nlpradiology %}. In {% cite casey2021systematic --file references %}, papers reviewed are grouped into six categories associated with the specific application: Diagnostic Surveillance, Disease information and classification, Quality Compliance, Cohort/Epidemiology, Language Discovery and Knowledge Structure, and Technical NLP. Extraction of clinical indications explored in this paper falls under the Diagnostic Surveillance category. Surprisingly, none of the 164 papers reviewed have leveraged a transformer architecture. The majority of the papers reviewed use either rule-based approaches or traditional machine learning approaches like SVM and logistic regression. In {% cite deshmukh2019semi %}, a BERT-based model is pretrained with a unsupervised learning approach on 218,159 radiology reports. The BERT model is then finetuned with a smaller dataset of radiology reports labeled into fine-grained disease classes. In {% cite wood2020alarm --file references %}, a pre-trained BioBERT model {% cite lee2019biobert --file references %} is finetuned on 3,000 MRI neuroradiology reports to determine the presence or absence of any abnormality. Note that BioBERT consists of a BERT model trained over a corpus of biomedical research articles sourced from PubMed[^pubmed] article abstracts and PubMed Central[^pmc] article full texts. {% cite alsentzer2019clinicalbert --file references %} present a variation of BioBERT, called Clinical BioBERT, in which the pretrained BioBERT model is trained on approximately 2 million notes from the MIMIC-III dataset {% cite johnson2016mimic --file references %}. {% cite li2022clinlongformer --file references %} also leverage MIMIC-III dataset to train Longformer yielding Clinical Longformer.
 
 ---
 
-## 3 Data
+## Data
 
 The radiology report dataset is provided by NYU Langone. There are 47,966 MRI reports, 565,504 ultrasound reports, and 1,168,384 mammography reports in our dataset. Although the scope of this paper is limited to MRI, we use radiology reports from other modalities in an intermediate task for pretraining before training on the target task. Note that none of the radiology reports have been labeled by clinical indication. We have manually labeled 500 radiology reports. The labeled dataset is split to train, validation, and test set by a 40% / 20% / 40% split respectively. Due to limited number of examples in the training and validation set associated with the “treatment monitoring” class, we have discarded the “treatment monitoring” class for this work. We have also added an “exclude” class label to capture reports with no relevant clinical indication information. In total, we have 5 classes given by high-risk screening, pre-operative planning, additional workup, short-term follow-up, and exclude.
 
 ---
 
-## 4 Models and Methods
+## Models and Methods
 
 We start with a heuristic approach which uses regular expressions to classify labels based on patterns present in the reports. This is a baseline we use to compare against other approaches. We then finetune a pretrained Clinical BioBERT network with a classification head {% cite alsentzer2019clinicalbert --file references %}. Given that the max length for a sequence that Clinical BioBERT can process is 512 tokens, we implement several strategies to handle documents with lengths greater than 512. One approach is to simply truncate the sequence. Another method uses a sliding window approach, in which each window is processed separately by Clinical BioBERT and the intermediate representations or the class predictions are aggregated through an aggregation function. We have implemented four different aggregation functions for sliding window: mean, max, mean/max, and attention.
 
@@ -69,7 +69,7 @@ We also implement a Prototypical Networks {% cite snell2017protonet --file refer
 
 ---
 
-## 5 Results
+## Results
 
 Our heuristic baseline model uses a rule-based approach that relies on regular expressions to identify patterns and classify the reports into one of the five indication classes. As shown in Table 1, the resulting F1 score on the validation set for the heuristic baseline is **0.540**.
 
@@ -99,7 +99,7 @@ To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy
 
 ---
 
-## 7 Conclusion
+## Conclusion
 
 We have implemented and trained clinical indication classifiers using a heuristic approach and deep learning-based approaches. The best performing method leverages a semi-supervised approach in which a pretrained Clinical Longformer classifier is finetuned on the labeled dataset after being trained on the unlabeled dataset with masked language modeling. The resulting validation F1 score of this approach is **0.914**, beating the baseline by **0.374**. For future work, we suggest training Clinical Longformer without truncating the sequence to 1024 (up to 4096 tokens possible) and extending MLM pretraining duration.
 
