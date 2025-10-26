@@ -39,9 +39,9 @@ An energy-based model defines a scalar energy \(E(x, y)\) over depth image \(x\)
 
 During inference, grasps are initialized randomly and refined by **gradient descent** on \(E(x, y)\), yielding improved candidates that converge to local minima on the manifold. The NCE loss is used for training:
 
-$$ L = \frac{1}{n^+} \sum_{i=1}^{n^+} \ell_i $$
+$$ L = \frac{1}{n^+} \sum\_{i=1}^{n^+} \ell_i $$
 
-$$ \ell_i = \frac{E_w(x_i, y_i)}{\tau} + \log \left[ \exp\left(\frac{-E_w(x_i, y_i)}{\tau}\right) + \sum_{j=1}^{n^-} \exp\left(\frac{-E_w(x_j, \hat{y}_j)}{\tau}\right) \right] $$
+$$ \ell*i = \frac{E_w(x_i, y_i)}{\tau} + \log \left[ \exp\left(\frac{-E_w(x_i, y_i)}{\tau}\right) + \sum*{j=1}^{n^-} \exp\left(\frac{-E_w(x_j, \hat{y}\_j)}{\tau}\right) \right] $$
 
 where \(\tau\) is a temperature hyperparameter controlling the sharpness of the energy separation.
 
@@ -133,10 +133,10 @@ Future work includes deploying this model in full 3D simulation and coupling it 
 
 ## References
 
-1. Mahler, J. _et al._, “Dex-Net 2.0: Deep Learning to Plan Robust Grasps with Synthetic Point Clouds and Analytic Grasp Metrics.” RSS, 2017.  
-2. Mousavian, A., Eppner, C., and Fox, D., “6-DOF GraspNet: Variational Grasp Generation for Object Manipulation.” ICCV, 2019.  
-3. Murali, A. _et al._, “6-DOF Grasping for Target-driven Object Manipulation in Clutter.” ICRA, 2020.  
-4. LeCun, Y. _et al._, “A Tutorial on Energy-based Learning.” MIT Press, 2007.  
-5. Gutmann, M. and Hyvӓrinen, A., “Noise-contrastive estimation: A new estimation principle for unnormalized statistical models.” AISTATS, 2010.  
-6. Misra, I. and van der Maaten, L., “Self-supervised learning of pretext-invariant representations.” arXiv:1912.01991, 2019.  
+1. Mahler, J. _et al._, “Dex-Net 2.0: Deep Learning to Plan Robust Grasps with Synthetic Point Clouds and Analytic Grasp Metrics.” RSS, 2017.
+2. Mousavian, A., Eppner, C., and Fox, D., “6-DOF GraspNet: Variational Grasp Generation for Object Manipulation.” ICCV, 2019.
+3. Murali, A. _et al._, “6-DOF Grasping for Target-driven Object Manipulation in Clutter.” ICRA, 2020.
+4. LeCun, Y. _et al._, “A Tutorial on Energy-based Learning.” MIT Press, 2007.
+5. Gutmann, M. and Hyvӓrinen, A., “Noise-contrastive estimation: A new estimation principle for unnormalized statistical models.” AISTATS, 2010.
+6. Misra, I. and van der Maaten, L., “Self-supervised learning of pretext-invariant representations.” arXiv:1912.01991, 2019.
 7. Chen, T., Kornblith, S., Norouzi, M., and Hinton, G., “A Simple Framework for Contrastive Learning of Visual Representation.” ICML, 2020.
