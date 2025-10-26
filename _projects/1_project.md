@@ -11,6 +11,8 @@ category: work
 
 Patient data exist in structured and unstructured formats. Structured data typically contains high level information. In cases where more detailed information is needed, unstructured data retrieval is required. Due to their simplicity, heuristic approaches are typically used to extract insights from the unstructured data sources. In this paper, we limit our scope to MRI radiology reports for breast cancer diagnostic and screening patients. We compare the heuristic approach to deep learning based approaches in their ability to classify the patient’s clinical indications from 500 labeled examples. The deep learning approaches include finetuning of BERT-like models and few-shot learning approaches like prototypical networks. Our results show a 69% improvement in the validation set F1 score when using the finetuning approach over the heuristic baseline.
 
+---
+
 ## 1 Introduction
 
 AI systems developed for breast cancer detection are evaluated at the population level and subgroup level. Subgroup analysis is used to understand the potential limitations of the AI systems and highlight unintended biases present in them. Patient subgroups can be categorized by age, breast tissue density, and clinical indication. While some subgroup categories like age are easy to extract from the electronic health record system, others like clinical indication are only available in unstructured formats and hence difficult to extract.
