@@ -67,7 +67,7 @@ The network consists of a convolutional encoder for depth features and a fully c
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/network.png"
-       alt="network" style="width:200px;height:auto;"/>
+       alt="network" style="width:300px;height:auto;"/>
   <figcaption>Figure 4: Network architecture for the energy-based model.</figcaption>
 </figure>
 
@@ -87,7 +87,7 @@ Training for 500 epochs across temperature values revealed that \(\tau = 100\) a
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-distribution.png"
-       alt="energy-distribution" style="width:40%;height:auto;"/>
+       alt="energy-distribution" style="width:50%;height:auto;"/>
   <figcaption>Figure 6: Validation energy distributions show separation between successful (low-energy) and failed (high-energy) grasps.</figcaption>
 </figure>
 
@@ -107,7 +107,7 @@ The energy contours (Figures 8–9) illustrate local minima around successful gr
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-contours.png"
-       alt="energy-contours" style="width:80%;height:auto;"/>
+       alt="energy-contours" style="width:90%;height:auto;"/>
   <figcaption>Figure 9: Energy manifold contours centered around a high-quality grasp region.</figcaption>
 </figure>
 
