@@ -121,6 +121,8 @@ Given that we are working with private patient data, it is not possible to have 
 
 {% bibliography --file references --cited %}
 
+---
+
 [^code-link]: <https://github.com/erasromani/indication_classification>
 [^pubmed]: <https://pubmed.ncbi.nlm.nih.gov/>
 [^pmc]: <https://www.ncbi.nlm.nih.gov/pmc/>
