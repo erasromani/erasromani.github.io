@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Few-Shot Learning for Indication Classification
-description: A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting
+title: Indication Classification
+description: NLP for classifying MRI radiology reports into clinical indications
 img: /assets/img/projects/clinical_indication.png
 importance: 1
 category: research
