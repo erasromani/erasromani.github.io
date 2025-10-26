@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Clinical Indication Classification
+title: Indication Classification
 description: A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting
 img: /assets/img/projects/clinical_indication.png
 importance: 1
