@@ -70,21 +70,28 @@ We also implement a Prototypical Networks {% cite snell2017protonet --file refer
 
 Our heuristic baseline model uses a rule-based approach that relies on regular expressions to identify patterns and classify the reports into one of the five indication classes. As shown in Table 1, the resulting F1 score on the validation set for the heuristic baseline is **0.540**. To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy loss function is used. Hyperparameter search is performed using a grid search strategy. Hyperparameters include learning rate, weight decay, warm-up steps, and total steps. A total of 1738 hyperparameter search experiments were conducted.
 
-**Table 1: Validation set results.**
-
-| Model                               | F1 score  |
-| ----------------------------------- | --------- |
-| **Heuristic baseline**              | **0.540** |
-| Clinical BioBERT (truncate)         | 0.716     |
-| Clinical BioBERT (SW: mean)         | 0.699     |
-| Clinical BioBERT (SW: max)          | 0.724     |
-| Clinical BioBERT (SW: mean/max)     | 0.735     |
-| Clinical BioBERT (SW: attention)    | 0.738     |
-| **Clinical Longformer (no MLM)**    | **0.887** |
-| **Clinical Longformer (+ MLM)**     | **0.914** |
-| Prototypical Net (BioBERT)          | 0.384     |
-| Prototypical Net (Longformer)       | 0.247     |
-| Prototypical Net (Longformer + MLM) | 0.218     |
+<table>
+  <caption><strong>Table 1:</strong> Validation set results.</caption>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>F1 score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Heuristic baseline</strong></td><td><strong>0.540</strong></td></tr>
+    <tr><td>Clinical BioBERT (truncate)</td><td>0.716</td></tr>
+    <tr><td>Clinical BioBERT (SW: mean)</td><td>0.699</td></tr>
+    <tr><td>Clinical BioBERT (SW: max)</td><td>0.724</td></tr>
+    <tr><td>Clinical BioBERT (SW: mean/max)</td><td>0.735</td></tr>
+    <tr><td>Clinical BioBERT (SW: attention)</td><td>0.738</td></tr>
+    <tr><td><strong>Clinical Longformer (no MLM)</strong></td><td><strong>0.887</strong></td></tr>
+    <tr><td><strong>Clinical Longformer (+ MLM)</strong></td><td><strong>0.914</strong></td></tr>
+    <tr><td>Prototypical Net (BioBERT)</td><td>0.384</td></tr>
+    <tr><td>Prototypical Net (Longformer)</td><td>0.247</td></tr>
+    <tr><td>Prototypical Net (Longformer + MLM)</td><td>0.218</td></tr>
+  </tbody>
+</table>
 
 The models were trained with an Adam optimizer with β₁ = 0.9 and β₂ = 0.999 and a linear warm-up and linear decay learning rate schedule. Gradient clipping was applied for training stability. Gradient accumulation was also applied when finetuning Clinical Longformer.
 
