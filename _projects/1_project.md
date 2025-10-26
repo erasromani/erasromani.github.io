@@ -46,3 +46,53 @@ We start with a heuristic approach which uses regular expressions to classify la
 The **attention-based sliding window aggregation** approach leverages the **gated attention mechanism** from Ilse et al. (2018). To allow for processing longer sequences, we also finetune a pretrained **Clinical Longformer** network with a classification head (Li et al., 2022). Although the max length of a sequence that Clinical Longformer can process is 4096, we truncate our reports to 1024 due to memory constraints. Per Dopierre et al. (2021), in addition to using the off-the-shelf pretrained Clinical Longformer, we train it on an intermediate **masked language model (MLM)** task to improve the quality of the output representation before finetuning on the target task.
 
 We also implement a **Prototypical Networks** (Snell et al., 2017) for few-shot learning with the off-the-shelf pretrained Clinical BioBERT, off-the-shelf pretrained Clinical Longformer, and MLM pretrained Clinical Longformer as the encoder base network. Prototypical networks use a nearest neighbor like strategy to classify examples from the output representation of the encoder base network. F1 score is used as the main evaluation metric.
+
+---
+
+## 5 Results
+
+Our heuristic baseline model uses a rule-based approach that relies on regular expressions to identify patterns and classify the reports into one of the five indication classes. As shown in Table 1, the resulting F1 score on the validation set for the heuristic baseline is **0.540**.
+
+To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy loss function is used. Hyperparameter search is performed using a grid search strategy. Hyperparameters include learning rate, weight decay, warm-up steps, and total steps. A total of 1738 hyperparameter search experiments were conducted. The models were trained with an Adam optimizer with β₁ = 0.9 and β₂ = 0.999 and a linear warm-up and linear decay learning rate schedule. Gradient clipping was applied for training stability. Gradient accumulation was also applied when finetuning Clinical Longformer.
+
+| Model                               | F1 score  |
+| ----------------------------------- | --------- |
+| **Heuristic baseline**              | **0.540** |
+| Clinical BioBERT (truncate)         | 0.716     |
+| Clinical BioBERT (SW: mean)         | 0.699     |
+| Clinical BioBERT (SW: max)          | 0.724     |
+| Clinical BioBERT (SW: mean/max)     | 0.735     |
+| Clinical BioBERT (SW: attention)    | 0.738     |
+| **Clinical Longformer (no MLM)**    | **0.887** |
+| **Clinical Longformer (+ MLM)**     | **0.914** |
+| Prototypical Net (BioBERT)          | 0.384     |
+| Prototypical Net (Longformer)       | 0.247     |
+| Prototypical Net (Longformer + MLM) | 0.218     |
+
+---
+
+## 6 Discussion
+
+The process of extracting clinical indications from a radiology report comes in two forms; one form in which a sentence clearly highlights the clinical indication and another form in which the entire report must be read before making a conclusion. The latter requires the ability to capture long-range dependencies and process as much of the report as possible given memory constraints. Simply truncating to 512 tokens when finetuning Clinical BioBERT yields subpar results. Implementing a sliding window yields some improvements, and the attention-based sliding window approach yields the highest F1 score among BioBERT variants. Clinical Longformer significantly outperforms Clinical BioBERT likely due to its ability to process longer sequences and capture long-range dependencies. Furthermore, intermediate MLM training improves performance even further.
+
+---
+
+## 7 Conclusion
+
+We have implemented and trained clinical indication classifiers using a heuristic approach and deep learning-based approaches. The best performing method leverages a semi-supervised approach in which a pretrained Clinical Longformer classifier is finetuned on the labeled dataset after being trained on the unlabeled dataset with masked language modeling. The resulting validation F1 score of this approach is **0.914**, beating the baseline by **0.374**. For future work, we suggest training Clinical Longformer without truncating the sequence to 1024 (up to 4096 tokens possible) and extending MLM pretraining duration.
+
+---
+
+### Acknowledgments
+
+We would like to thank **Jan Witowski** for providing a clinical perspective to the problem, developing the code for the heuristic baseline, and labeling the data.
+
+---
+
+### Collaboration Statement
+
+Given that we are working with private patient data, it is not possible to have members in this team without authorized access to the data. The process for gaining access to this data is long; hence this team has one team member. A medical postdoc from NYU Grossman School of Medicine, Jan Witowski, provided data labeling support. Note that Sam Bowman has already been notified about the circumstance and has approved it.
+
+---
+
+**Code:** [https://github.com/erasromani/indication_classification](https://github.com/erasromani/indication_classification)
