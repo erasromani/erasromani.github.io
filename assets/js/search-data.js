@@ -39,8 +39,8 @@ ninja.data = [{
             },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
           title: 'A simple inline announcement with Markdown emoji! :sparkles: :smile:',
           description: "",
-          section: "News",},{id: "projects-clinical-indication-classification",
-          title: 'Clinical Indication Classification',
+          section: "News",},{id: "projects-indication-classification",
+          title: 'Indication Classification',
           description: "A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
