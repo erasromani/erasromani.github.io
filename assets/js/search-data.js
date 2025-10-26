@@ -54,9 +54,9 @@ ninja.data = [{
           description: "Bridging the gap between grasp sampling, evaluation, and refinement.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/3_project/";
-            },},{id: "projects-project-4",
-          title: 'project 4',
-          description: "another without an image",
+            },},{id: "projects-multimodal-breast-cancer-detection",
+          title: 'Multimodal Breast Cancer Detection',
+          description: "Leveraging multiple modalities to reduce the false negative rate in breast cancer screening with AI.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/4_project/";
             },},{id: "projects-project-5",
