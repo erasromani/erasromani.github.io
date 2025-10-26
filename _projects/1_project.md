@@ -46,7 +46,7 @@ The radiology report dataset is provided by NYU Langone. There are 47,966 MRI re
 
 We start with a heuristic approach which uses regular expressions to classify labels based on patterns present in the reports. This is a baseline we use to compare against other approaches. We then finetune a pretrained Clinical BioBERT network with a classification head {% cite alsentzer2019clinicalbert --file references %}. Given that the max length for a sequence that Clinical BioBERT can process is 512 tokens, we implement several strategies to handle documents with lengths greater than 512. One approach is to simply truncate the sequence. Another method uses a sliding window approach, in which each window is processed separately by Clinical BioBERT and the intermediate representations or the class predictions are aggregated through an aggregation function. We have implemented four different aggregation functions for sliding window: mean, max, mean/max, and attention.
 
-The mean/max aggregation (from {% cite huang2019b --file references %}) is:
+The mean/max aggregation (from {% cite huang2019 --file references %}) is:
 
 $$
 S \;=\; \frac{S_{\max}^{(K)} \;+\; S_{\text{mean}}^{(K)} \,\frac{K}{c}}{1 + \frac{K}{c}}
@@ -75,25 +75,27 @@ Our heuristic baseline model uses a rule-based approach that relies on regular e
 
 To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy loss function is used. Hyperparameter search is performed using a grid search strategy. Hyperparameters include learning rate, weight decay, warm-up steps, and total steps. A total of 1738 hyperparameter search experiments were conducted. The models were trained with an Adam optimizer with β₁ = 0.9 and β₂ = 0.999 and a linear warm-up and linear decay learning rate schedule. Gradient clipping was applied for training stability. Gradient accumulation was also applied when finetuning Clinical Longformer.
 
-| Model                               | F1 score  |
-| ----------------------------------- | --------- |
-| **Heuristic baseline**              | **0.540** |
-| Clinical BioBERT (truncate)         | 0.716     |
-| Clinical BioBERT (SW: mean)         | 0.699     |
-| Clinical BioBERT (SW: max)          | 0.724     |
-| Clinical BioBERT (SW: mean/max)     | 0.735     |
-| Clinical BioBERT (SW: attention)    | 0.738     |
-| **Clinical Longformer (no MLM)**    | **0.887** |
-| **Clinical Longformer (+ MLM)**     | **0.914** |
-| Prototypical Net (BioBERT)          | 0.384     |
-| Prototypical Net (Longformer)       | 0.247     |
-| Prototypical Net (Longformer + MLM) | 0.218     |
-
----
-
-## 6 Discussion
-
-The process of extracting clinical indications from a radiology report comes in two forms; one form in which a sentence clearly highlights the clinical indication and another form in which the entire report must be read before making a conclusion. The latter requires the ability to capture long-range dependencies and process as much of the report as possible given memory constraints. Simply truncating to 512 tokens when finetuning Clinical BioBERT yields subpar results. Implementing a sliding window yields some improvements, and the attention-based sliding window approach yields the highest F1 score among BioBERT variants. Clinical Longformer significantly outperforms Clinical BioBERT likely due to its ability to process longer sequences and capture long-range dependencies. Furthermore, intermediate MLM training improves performance even further.
+<figure class="table">
+  <figcaption><strong>Table 1:</strong> Validation set results.</figcaption>
+  <table>
+    <thead>
+      <tr><th>Model</th><th>F1 score</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Heuristic baseline</strong></td><td><strong>0.540</strong></td></tr>
+      <tr><td>Clinical BioBERT (truncate)</td><td>0.716</td></tr>
+      <tr><td>Clinical BioBERT (SW: mean)</td><td>0.699</td></tr>
+      <tr><td>Clinical BioBERT (SW: max)</td><td>0.724</td></tr>
+      <tr><td>Clinical BioBERT (SW: mean/max)</td><td>0.735</td></tr>
+      <tr><td>Clinical BioBERT (SW: attention)</td><td>0.738</td></tr>
+      <tr><td><strong>Clinical Longformer (no MLM)</strong></td><td><strong>0.887</strong></td></tr>
+      <tr><td><strong>Clinical Longformer (+ MLM)</strong></td><td><strong>0.914</strong></td></tr>
+      <tr><td>Prototypical Net (BioBERT)</td><td>0.384</td></tr>
+      <tr><td>Prototypical Net (Longformer)</td><td>0.247</td></tr>
+      <tr><td>Prototypical Net (Longformer + MLM)</td><td>0.218</td></tr>
+    </tbody>
+  </table>
+</figure>
 
 ---
 
