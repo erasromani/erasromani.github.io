@@ -44,9 +44,9 @@ ninja.data = [{
           description: "A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
-            },},{id: "projects-project-2",
-          title: 'project 2',
-          description: "a project with a background image and giscus comments",
+            },},{id: "projects-robotic-simulation",
+          title: 'Robotic Simulation',
+          description: "Python wrapper for NVIDIA Omniverse Isaac-Sim",
           section: "Projects",handler: () => {
               window.location.href = "/projects/2_project/";
             },},{id: "projects-project-3-with-very-long-name",
