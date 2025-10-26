@@ -67,7 +67,7 @@ The network consists of a convolutional encoder for depth features and a fully c
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/network.png"
-       alt="network" style="width:400px;height:auto;"/>
+       alt="network" style="width:200px;height:auto;"/>
   <figcaption>Figure 4: Network architecture for the energy-based model.</figcaption>
 </figure>
 
@@ -87,13 +87,13 @@ Training for 500 epochs across temperature values revealed that \(\tau = 100\) a
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-distribution.png"
-       alt="energy-distribution" style="width:80%;height:auto;"/>
+       alt="energy-distribution" style="width:40%;height:auto;"/>
   <figcaption>Figure 6: Validation energy distributions show separation between successful (low-energy) and failed (high-energy) grasps.</figcaption>
 </figure>
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/high-vs-low-energy.png"
-       alt="high-vs-low-energy" style="width:80%;height:auto;"/>
+       alt="high-vs-low-energy" style="width:90%;height:auto;"/>
   <figcaption>Figure 7: Visual comparison of low-energy (successful) and high-energy (failed) grasp samples.</figcaption>
 </figure>
 
@@ -101,7 +101,7 @@ The energy contours (Figures 8–9) illustrate local minima around successful gr
 
 <figure align="center">
   <img src="https://erasromani.github.io/ebm-grasp-planning/images/inference-example.png"
-       alt="inference-example" style="width:60%;height:auto;"/>
+       alt="inference-example" style="width:30%;height:auto;"/>
   <figcaption>Figure 8: Example depth image and grasp pair used for inference visualization.</figcaption>
 </figure>
 
