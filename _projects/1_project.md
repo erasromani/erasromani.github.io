@@ -2,7 +2,7 @@
 layout: page
 title: Few-Shot Learning for Indication Classification
 description: A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting
-img: /assets/img/12.jpg
+img: /assets/img/projects/clinical_indications.png
 importance: 1
 category: research
 ---
