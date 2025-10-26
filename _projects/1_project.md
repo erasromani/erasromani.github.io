@@ -1,10 +1,13 @@
 ---
 layout: page
-title: Indication Classification
+title: Few-Shot Learning for Indication Classification
 description: A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting
 img: /assets/img/projects/clinical_indication.png
 importance: 1
 category: research
+scholar:
+  group_by: none
+  group_order: none
 ---
 
 ## Abstract
@@ -29,7 +32,7 @@ In this project, we develop a natural language processing system that classifies
 
 ## 2 Related Work
 
-Extensive work has been published on the application of NLP on clinical data. A detailed literature survey of application of NLP to radiology reports specifically was conducted in {% cite casey2021systematic --file references %} and {% cite pons2016nlpradiology %}. In {% cite casey2021systematic --file references %}, papers reviewed are grouped into six categories associated with the specific application: Diagnostic Surveillance, Disease information and classification, Quality Compliance, Cohort/Epidemiology, Language Discovery and Knowledge Structure, and Technical NLP. Extraction of clinical indications explored in this paper falls under the Diagnostic Surveillance category. Surprisingly, none of the 164 papers reviewed have leveraged a transformer architecture. The majority of the papers reviewed use either rule-based approaches or traditional machine learning approaches like SVM and logistic regression. In {% cite deshmukh2019semi %}, a BERT-based model is pretrained with a unsupervised learning approach on 218,159 radiology reports. The BERT model is then finetuned with a smaller dataset of radiology reports labeled into fine-grained disease classes. In {% cite wood2020alarm --file references %}, a pre-trained BioBERT model {% cite lee2019biobert --file references %} is finetuned on 3,000 MRI neuroradiology reports to determine the presence or absence of any abnormality. Note that BioBERT consists of a BERT model trained over a corpus of biomedical research articles sourced from PubMed[^pubmed] article abstracts and PubMed Central[^pmc] article full texts. {% cite alsentzer2019clinicalbert --file references %} present a variation of BioBERT, called Clinical BioBERT, in which the pretrained BioBERT model is trained on approximately 2 million notes from the MIMIC-III dataset {% cite johnson2016mimic --file references %}. {% cite li2022clinlongformer --file references %} also leverage MIMIC-III dataset to train Longformer yielding Clinical Longformer.
+Extensive work has been published on the application of NLP on clinical data. A detailed literature survey of application of NLP to radiology reports specifically was conducted in Casey et al. (2021) and Pons et al. (2016). In Casey et al. (2021), papers reviewed are grouped into six categories associated with the specific application: Diagnostic Surveillance, Disease information and classification, Quality Compliance, Cohort/Epidemiology, Language Discovery and Knowledge Structure, and Technical NLP. Extraction of clinical indications explored in this paper falls under the Diagnostic Surveillance category. Surprisingly, none of the 164 papers reviewed have leveraged a transformer architecture. The majority of the papers reviewed use either rule-based approaches or traditional machine learning approaches like SVM and logistic regression. In Deshmukh et al. (2019), a BERT-based model is pretrained with a unsupervised learning approach on 218,159 radiology reports. The BERT model is then finetuned with a smaller dataset of radiology reports labeled into fine-grained disease classes. In Wood et al. (2020), a pre-trained BioBERT model (Lee et al., 2019) is finetuned on 3,000 MRI neuroradiology reports to determine the presence or absence of any abnormality. Note that BioBERT consists of a BERT model trained over a corpus of biomedical research articles sourced from PubMed article abstracts and PubMed Central article full texts. Alsentzer et al. (2019) present a variation of BioBERT, called Clinical BioBERT, in which the pretrained BioBERT model is trained on approximately 2 million notes from the MIMIC-III dataset (Johnson et al., 2016). Li et al. (2022) also leverage MIMIC-III dataset to train Longformer yielding Clinical Longformer.
 
 ---
 
@@ -43,6 +46,23 @@ The radiology report dataset is provided by NYU Langone. There are 47,966 MRI re
 
 We start with a heuristic approach which uses regular expressions to classify labels based on patterns present in the reports. This is a baseline we use to compare against other approaches. We then finetune a pretrained Clinical BioBERT network with a classification head {% cite alsentzer2019clinicalbert --file references %}. Given that the max length for a sequence that Clinical BioBERT can process is 512 tokens, we implement several strategies to handle documents with lengths greater than 512. One approach is to simply truncate the sequence. Another method uses a sliding window approach, in which each window is processed separately by Clinical BioBERT and the intermediate representations or the class predictions are aggregated through an aggregation function. We have implemented four different aggregation functions for sliding window: mean, max, mean/max, and attention.
 
+The mean/max aggregation (from {% cite huang2019b --file references %}) is:
+
+$$
+S \;=\; \frac{S_{\max}^{(K)} \;+\; S_{\text{mean}}^{(K)} \,\frac{K}{c}}{1 + \frac{K}{c}}
+\tag{1}
+$$
+
+The attention-based sliding window aggregation approach leverages the gated attention mechanism from {% cite ilse2018attention --file references %}:
+
+$$
+\alpha_k \;=\;
+\frac{\exp\!\left\{\, W\!\left(\tanh(V v_k)\;\odot\;\sigma(U v_k)\right) \right\}}
+{\sum_{j=1}^{K} \exp\!\left\{\, W\!\left(\tanh(V v_j)\;\odot\;\sigma(U v_j)\right) \right\}}
+,\qquad \sum_{k=1}^{K}\alpha_k = 1
+\tag{2}
+$$
+
 To allow for processing longer sequences, we also finetune a pretrained Clinical Longformer network with a classification head {% cite li2022clinlongformer --file references %}. Although the max length of a sequence that Clinical Longformer can process is 4096, we truncate our reports to 1024 due to memory constraints. Per {% cite dopierre2021realitycheck --file references %}, in addition to using the off-the-shelf pretrained Clinical Longformer, we train it on the an intermediate masked language model (MLM) task to improve the quality of the output representation before finetuning on the target task.
 
 We also implement a Prototypical Networks {% cite snell2017protonet --file references %} for few-shot learning with the off-the-shelf pretrained Clinical BioBERT, off-the-shelf pretrained Clinical Longformer, and MLM pretrained Clinical Longformer as the encoder base network. Prototypical networks use a nearest neighbor like strategy to classify examples from the output representation of the encoder base network. F1 score will be used as the main evaluation metric. Given that some of the few-shot learning approaches and the heuristic baseline model do not output class probabilities AUROC is not an applicable evaluation metric.
@@ -51,7 +71,9 @@ We also implement a Prototypical Networks {% cite snell2017protonet --file refer
 
 ## 5 Results
 
-Our heuristic baseline model uses a rule-based approach that relies on regular expressions to identify patterns and classify the reports into one of the five indication classes. As shown in Table 1, the resulting F1 score on the validation set for the heuristic baseline is **0.540**. To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy loss function is used. Hyperparameter search is performed using a grid search strategy. Hyperparameters include learning rate, weight decay, warm-up steps, and total steps. A total of 1738 hyperparameter search experiments were conducted.
+Our heuristic baseline model uses a rule-based approach that relies on regular expressions to identify patterns and classify the reports into one of the five indication classes. As shown in Table 1, the resulting F1 score on the validation set for the heuristic baseline is **0.540**.
+
+To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy loss function is used. Hyperparameter search is performed using a grid search strategy. Hyperparameters include learning rate, weight decay, warm-up steps, and total steps. A total of 1738 hyperparameter search experiments were conducted. The models were trained with an Adam optimizer with β₁ = 0.9 and β₂ = 0.999 and a linear warm-up and linear decay learning rate schedule. Gradient clipping was applied for training stability. Gradient accumulation was also applied when finetuning Clinical Longformer.
 
 | Model                               | F1 score  |
 | ----------------------------------- | --------- |
@@ -66,12 +88,6 @@ Our heuristic baseline model uses a rule-based approach that relies on regular e
 | Prototypical Net (BioBERT)          | 0.384     |
 | Prototypical Net (Longformer)       | 0.247     |
 | Prototypical Net (Longformer + MLM) | 0.218     |
-
-The models were trained with an Adam optimizer with β₁ = 0.9 and β₂ = 0.999 and a linear warm-up and linear decay learning rate schedule. Gradient clipping was applied for training stability. Gradient accumulation was also applied when finetuning Clinical Longformer.
-
-The dataset for the the masked language modeling experiments consists of all the available radiology reports except the reports associated with the labeled test set. The validation set consists of 5000 randomly sampled reports and the training set consists of the rest of the reports. The pretrained Clinical Longformer model was trained for approximately 2 days on 6 GPUs with a total batch size of 42 equating to two epochs of training. The model was trained with gradient clipping, a linear warm-up consisting of 1000 warm-up steps, and linear decay learning rate schedule. Adam optimizer was used with weight decay value of 0.01, β₁ = 0.9, and β₂ = 0.999.
-
-Finetuning Clinical Longformer with an intermediate masked language modeling task yields the best performing model and an F1 score of 0.914, beating the baseline by 0.374. Although the Prototypical Network approach yielded promising results in {% cite snell2017protonet --file references %}, it performed poorly in our use case.
 
 ---
 
@@ -106,7 +122,3 @@ Given that we are working with private patient data, it is not possible to have 
 ---
 
 [^code-link]: Code for our work is available on GitHub: [https://github.com/erasromani/indication_classification](https://github.com/erasromani/indication_classification)
-
-[^pubmed]: [https://www.ncbi.nlm.nih.gov/pubmed](https://www.ncbi.nlm.nih.gov/pubmed)
-
-[^pmc]: [https://www.ncbi.nlm.nih.gov/pmc](https://www.ncbi.nlm.nih.gov/pmc)
