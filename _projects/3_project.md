@@ -26,7 +26,8 @@ By contrast, energy-based models represent grasp quality as a **continuous energ
 This work demonstrates how EBMs can unify the grasping pipeline — generating, evaluating, and refining grasps in a fully differentiable loop.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/two-stage-approach.png" alt="two-stage-approach"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/two-stage-approach.png"
+       alt="two-stage-approach" style="width:80%;height:auto;"/>
   <figcaption>Figure 1: The traditional two-stage grasp planning approach, in which grasp sampling and evaluation are separate (image adapted from Mousavian et al. [2]).</figcaption>
 </figure>
 
@@ -38,14 +39,15 @@ An energy-based model defines a scalar energy \(E(x, y)\) over depth image \(x\)
 
 During inference, grasps are initialized randomly and refined by **gradient descent** on \(E(x, y)\), yielding improved candidates that converge to local minima on the manifold. The NCE loss is used for training:
 
-$$ L = \frac{1}{n^+} \sum\_{i=1}^{n^+} \ell_i $$
+$$ L = \frac{1}{n^+} \sum_{i=1}^{n^+} \ell_i $$
 
-$$ \ell*i = \frac{E_w(x_i, y_i)}{\tau} + \log \left[ \exp\left(\frac{-E_w(x_i, y_i)}{\tau}\right) + \sum*{j=1}^{n^-} \exp\left(\frac{-E_w(x_j, \hat{y}\_j)}{\tau}\right) \right] $$
+$$ \ell_i = \frac{E_w(x_i, y_i)}{\tau} + \log \left[ \exp\left(\frac{-E_w(x_i, y_i)}{\tau}\right) + \sum_{j=1}^{n^-} \exp\left(\frac{-E_w(x_j, \hat{y}_j)}{\tau}\right) \right] $$
 
 where \(\tau\) is a temperature hyperparameter controlling the sharpness of the energy separation.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/ebm-inference.png" alt="ebm-inference"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/ebm-inference.png"
+       alt="ebm-inference" style="width:80%;height:auto;"/>
   <figcaption>Figure 2: EBMs unify grasp sampling, evaluation, and refinement by descending the energy manifold.</figcaption>
 </figure>
 
@@ -56,14 +58,16 @@ where \(\tau\) is a temperature hyperparameter controlling the sharpness of the 
 A subset of **220,000 examples** from the **DexNet 2.0** dataset was used for training and validation. DexNet 2.0 contains 6.7 million synthetic depth images and grasps generated from 1,500 3D object models. Each grasp is represented by a 4D vector: center row, center column, depth, and binary success label.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/dexnet-2.0.png" alt="dexnet-2.0"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/dexnet-2.0.png"
+       alt="dexnet-2.0" style="width:80%;height:auto;"/>
   <figcaption>Figure 3: Sample from DexNet 2.0 showing grasp quality annotations [1].</figcaption>
 </figure>
 
 The network consists of a convolutional encoder for depth features and a fully connected energy head. The grasp vector is repeated and concatenated with visual features before entering the MLP, which outputs a scalar energy.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/network.png" alt="network" width="300" height="320"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/network.png"
+       alt="network" style="width:400px;height:auto;"/>
   <figcaption>Figure 4: Network architecture for the energy-based model.</figcaption>
 </figure>
 
@@ -76,29 +80,34 @@ The model was trained with batch size 512, learning rate 1e-4, and temperature \
 Training for 500 epochs across temperature values revealed that \(\tau = 100\) achieved the best alignment (86.8%). Higher temperatures improve stability by widening the energy separation between positives and negatives.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/training-curves.png" alt="training-curves"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/training-curves.png"
+       alt="training-curves" style="width:80%;height:auto;"/>
   <figcaption>Figure 5: Training curves across temperature values.</figcaption>
 </figure>
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-distribution.png" alt="energy-distribution"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-distribution.png"
+       alt="energy-distribution" style="width:80%;height:auto;"/>
   <figcaption>Figure 6: Validation energy distributions show separation between successful (low-energy) and failed (high-energy) grasps.</figcaption>
 </figure>
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/high-vs-low-energy.png" alt="high-vs-low-energy"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/high-vs-low-energy.png"
+       alt="high-vs-low-energy" style="width:80%;height:auto;"/>
   <figcaption>Figure 7: Visual comparison of low-energy (successful) and high-energy (failed) grasp samples.</figcaption>
 </figure>
 
 The energy contours (Figures 8–9) illustrate local minima around successful grasps, confirming that the EBM learns a smooth manifold corresponding to grasp quality.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/inference-example.png" alt="inference-example"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/inference-example.png"
+       alt="inference-example" style="width:60%;height:auto;"/>
   <figcaption>Figure 8: Example depth image and grasp pair used for inference visualization.</figcaption>
 </figure>
 
 <figure align="center">
-  <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-contours.png" alt="energy-contours"/>
+  <img src="https://erasromani.github.io/ebm-grasp-planning/images/energy-contours.png"
+       alt="energy-contours" style="width:80%;height:auto;"/>
   <figcaption>Figure 9: Energy manifold contours centered around a high-quality grasp region.</figcaption>
 </figure>
 
@@ -124,10 +133,10 @@ Future work includes deploying this model in full 3D simulation and coupling it 
 
 ## References
 
-1. Mahler, J. _et al._, “Dex-Net 2.0: Deep Learning to Plan Robust Grasps with Synthetic Point Clouds and Analytic Grasp Metrics.” RSS, 2017.
-2. Mousavian, A., Eppner, C., and Fox, D., “6-DOF GraspNet: Variational Grasp Generation for Object Manipulation.” ICCV, 2019.
-3. Murali, A. _et al._, “6-DOF Grasping for Target-driven Object Manipulation in Clutter.” ICRA, 2020.
-4. LeCun, Y. _et al._, “A Tutorial on Energy-based Learning.” MIT Press, 2007.
-5. Gutmann, M. and Hyvӓrinen, A., “Noise-contrastive estimation: A new estimation principle for unnormalized statistical models.” AISTATS, 2010.
-6. Misra, I. and van der Maaten, L., “Self-supervised learning of pretext-invariant representations.” arXiv:1912.01991, 2019.
+1. Mahler, J. _et al._, “Dex-Net 2.0: Deep Learning to Plan Robust Grasps with Synthetic Point Clouds and Analytic Grasp Metrics.” RSS, 2017.  
+2. Mousavian, A., Eppner, C., and Fox, D., “6-DOF GraspNet: Variational Grasp Generation for Object Manipulation.” ICCV, 2019.  
+3. Murali, A. _et al._, “6-DOF Grasping for Target-driven Object Manipulation in Clutter.” ICRA, 2020.  
+4. LeCun, Y. _et al._, “A Tutorial on Energy-based Learning.” MIT Press, 2007.  
+5. Gutmann, M. and Hyvӓrinen, A., “Noise-contrastive estimation: A new estimation principle for unnormalized statistical models.” AISTATS, 2010.  
+6. Misra, I. and van der Maaten, L., “Self-supervised learning of pretext-invariant representations.” arXiv:1912.01991, 2019.  
 7. Chen, T., Kornblith, S., Norouzi, M., and Hinton, G., “A Simple Framework for Contrastive Learning of Visual Representation.” ICML, 2020.
