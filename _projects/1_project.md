@@ -70,6 +70,29 @@ We also implement a Prototypical Networks {% cite snell2017protonet --file refer
 
 Our heuristic baseline model uses a rule-based approach that relies on regular expressions to identify patterns and classify the reports into one of the five indication classes. As shown in Table 1, the resulting F1 score on the validation set for the heuristic baseline is **0.540**. To finetune the Clinical BioBERT and Clinical Longformer models, a cross entropy loss function is used. Hyperparameter search is performed using a grid search strategy. Hyperparameters include learning rate, weight decay, warm-up steps, and total steps. A total of 1738 hyperparameter search experiments were conducted.
 
+<table>
+  <caption><strong>Table 1:</strong> Validation set results.</caption>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>F1 score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Heuristic baseline</strong></td><td><strong>0.540</strong></td></tr>
+    <tr><td>Clinical BioBERT (truncate)</td><td>0.716</td></tr>
+    <tr><td>Clinical BioBERT (SW: mean)</td><td>0.699</td></tr>
+    <tr><td>Clinical BioBERT (SW: max)</td><td>0.724</td></tr>
+    <tr><td>Clinical BioBERT (SW: mean/max)</td><td>0.735</td></tr>
+    <tr><td>Clinical BioBERT (SW: attention)</td><td>0.738</td></tr>
+    <tr><td><strong>Clinical Longformer (no MLM)</strong></td><td><strong>0.887</strong></td></tr>
+    <tr><td><strong>Clinical Longformer (+ MLM)</strong></td><td><strong>0.914</strong></td></tr>
+    <tr><td>Prototypical Net (BioBERT)</td><td>0.384</td></tr>
+    <tr><td>Prototypical Net (Longformer)</td><td>0.247</td></tr>
+    <tr><td>Prototypical Net (Longformer + MLM)</td><td>0.218</td></tr>
+  </tbody>
+</table>
+
 The models were trained with an Adam optimizer with β₁ = 0.9 and β₂ = 0.999 and a linear warm-up and linear decay learning rate schedule. Gradient clipping was applied for training stability. Gradient accumulation was also applied when finetuning Clinical Longformer.
 
 The dataset for the the masked language modeling experiments consists of all the available radiology reports except the reports associated with the labeled test set. The validation set consists of 5000 randomly sampled reports and the training set consists of the rest of the reports. The pretrained Clinical Longformer model was trained for approximately 2 days on 6 GPUs with a total batch size of 42 equating to two epochs of training. The model was trained with gradient clipping, a linear warm-up consisting of 1000 warm-up steps, and linear decay learning rate schedule. Adam optimizer was used with weight decay value of 0.01, β₁ = 0.9, and β₂ = 0.999.
