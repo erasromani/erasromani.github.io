@@ -41,11 +41,28 @@ The radiology report dataset is provided by NYU Langone. There are 47,966 MRI re
 
 ## 4 Models and Methods
 
-We start with a heuristic approach which uses regular expressions to classify labels based on patterns present in the reports. This is a baseline we use to compare against other approaches. We then finetune a pretrained **Clinical BioBERT** network with a classification head (Alsentzer et al., 2019). Given that the max length for a sequence that Clinical BioBERT can process is 512 tokens, we implement several strategies to handle documents with lengths greater than 512. One approach is to simply truncate the sequence. Another method uses a **sliding window approach**, in which each window is processed separately by Clinical BioBERT and the intermediate representations or the class predictions are aggregated through an aggregation function. We have implemented four different aggregation functions for sliding window: mean, max, mean/max, and attention.
+We start with a heuristic approach which uses regular expressions to classify labels based on patterns present in the reports. This is a baseline we use to compare against other approaches. We then finetune a pretrained Clinical BioBERT network with a classification head {% cite alsentzer2019clinicalbert --file references %}. Given that the max length for a sequence that Clinical BioBERT can process is 512 tokens, we implement several strategies to handle documents with lengths greater than 512. One approach is to simply truncate the sequence. Another method uses a sliding window approach, in which each window is processed separately by Clinical BioBERT and the intermediate representations or the class predictions are aggregated through an aggregation function. We have implemented four different aggregation functions for sliding window: mean, max, mean/max, and attention.
 
-The **attention-based sliding window aggregation** approach leverages the **gated attention mechanism** from Ilse et al. (2018). To allow for processing longer sequences, we also finetune a pretrained **Clinical Longformer** network with a classification head (Li et al., 2022). Although the max length of a sequence that Clinical Longformer can process is 4096, we truncate our reports to 1024 due to memory constraints. Per Dopierre et al. (2021), in addition to using the off-the-shelf pretrained Clinical Longformer, we train it on an intermediate **masked language model (MLM)** task to improve the quality of the output representation before finetuning on the target task.
+The mean/max aggregation (from {% cite huang2019b --file references %}) is:
 
-We also implement a **Prototypical Networks** (Snell et al., 2017) for few-shot learning with the off-the-shelf pretrained Clinical BioBERT, off-the-shelf pretrained Clinical Longformer, and MLM pretrained Clinical Longformer as the encoder base network. Prototypical networks use a nearest neighbor like strategy to classify examples from the output representation of the encoder base network. F1 score is used as the main evaluation metric.
+$$
+S \;=\; \frac{S_{\max}^{(K)} \;+\; S_{\text{mean}}^{(K)} \,\frac{K}{c}}{1 + \frac{K}{c}}
+\tag{1}
+$$
+
+The attention-based sliding window aggregation approach leverages the gated attention mechanism from {% cite ilse2018attention --file references %}:
+
+$$
+\alpha_k \;=\;
+\frac{\exp\!\left\{\, W\!\left(\tanh(V v_k)\;\odot\;\sigma(U v_k)\right) \right\}}
+{\sum_{j=1}^{K} \exp\!\left\{\, W\!\left(\tanh(V v_j)\;\odot\;\sigma(U v_j)\right) \right\}}
+,\qquad \sum_{k=1}^{K}\alpha_k = 1
+\tag{2}
+$$
+
+To allow for processing longer sequences, we also finetune a pretrained Clinical Longformer network with a classification head {% cite li2022clinlongformer --file references %}. Although the max length of a sequence that Clinical Longformer can process is 4096, we truncate our reports to 1024 due to memory constraints. Per {% cite dopierre2021realitycheck --file references %}, in addition to using the off-the-shelf pretrained Clinical Longformer, we train it on the an intermediate masked language model (MLM) task to improve the quality of the output representation before finetuning on the target task.
+
+We also implement a Prototypical Networks {% cite snell2017protonet --file references %} for few-shot learning with the off-the-shelf pretrained Clinical BioBERT, off-the-shelf pretrained Clinical Longformer, and MLM pretrained Clinical Longformer as the encoder base network. Prototypical networks use a nearest neighbor like strategy to classify examples from the output representation of the encoder base network. F1 score will be used as the main evaluation metric. Given that some of the few-shot learning approaches and the heuristic baseline model do not output class probabilities AUROC is not an applicable evaluation metric.
 
 ---
 
@@ -94,5 +111,7 @@ We would like to thank **Jan Witowski** for providing a clinical perspective to 
 Given that we are working with private patient data, it is not possible to have members in this team without authorized access to the data. The process for gaining access to this data is long; hence this team has one team member. A medical postdoc from NYU Grossman School of Medicine, Jan Witowski, provided data labeling support. Note that Sam Bowman has already been notified about the circumstance and has approved it.
 
 ---
+
+{% bibliography --file references --cited %}
 
 [^code-link]: Code for our work is available on GitHub: https://github.com/erasromani/indication_classification
