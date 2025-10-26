@@ -3,7 +3,7 @@ layout: page
 title: Robotic Simulation
 description: Python wrapper for NVIDIA Omniverse Isaac-Sim
 img: /assets/img/projects/isaac-sim.png
-importance: 2
+importance: 3
 category: research
 ---
 

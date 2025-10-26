@@ -3,7 +3,7 @@ layout: page
 title: Multimodal Breast Cancer Detection
 description: Leveraging multiple modalities to reduce the false negative rate in breast cancer screening with AI.
 img: /assets/img/projects/multimodal-breast.png
-importance: 4
+importance: 1
 category: research
 ---
 
@@ -28,7 +28,10 @@ Due to the large resolution of mammography images (2944 by 1920 pixels) and the 
 In Shen at al. 2021b, a neural network is developed with the objective of reducing the false-positive rates as radiologist breast cancer diagnosis with ultrasound images are typically associated with higher false-positive rates. The network consists of a resnet feature extractor followed by a one-by-one convolution with a sigmoid activation to yield saliency maps. The saliency maps are aggregated to a prediction via top-k pooling. The resulting image level prediction are aggregated to breast level predictions via an attention mechanism.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/nets.png" alt="nets"/>
+  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/nets.png"
+       alt="nets"
+       loading="lazy"
+       style="max-width: 900px; width: 70%; height: auto;" />
   <figcaption>Figure 1: Single modality networks for ultrasound and mammography.</figcaption>
 </figure>
 
@@ -82,14 +85,20 @@ Our late fusion approach follows a similar form to the transformer based predict
 For all late fusion methods, we ran three sets of experiments; (1) network is trained end-to-end, (2) pre-trained weights are loaded for single modality networks and only the fusion module is trained, and (3) pre-trained weights are loaded and frozen, fusion module is trained until convergence, followed by unfreezing all weights and fine-tuning the whole multi-modal network until convergence. Note that the pre-trained weights for the single modality networks are obtained from the baseline. Adam optimizer is used for all experiments with weight decay value of \\( 10^{-5} \\), \\( \beta_1=0.9 \\), and \\( \beta_2=0.999 \\). Grid-based hyperparameter search was conducted for the learning rate and the single modality network configuration. \\( \beta \\) and \\( \gamma \\) from Equation 1 and Equation 2 were set to 0.1 and 0.01 respectively.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/table.png" alt="table"/>
+  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/table.png"
+       alt="table"
+       loading="lazy"
+       style="max-width: 1000px; width: 90%; height: auto;" />
   <figcaption>Table 1: Validation AUROC results associated with best performing late fusion models trained until convergence with early stopping.</figcaption>
 </figure>
 
 Late fusion experiment results are shown in Table 1. Column headers "End-to-end", "Fine-tune fusion module", and "Fine-tune whole network" in Table 1 correspond to experiments (1), (2), and (3) discussed in the prior paragraph respectively. Loading pre-trained weights for the single modality networks before training yields a significant improvement in performance. Fine-tuning the whole network yields inconclusive results as performance does not necessarily increase in comparison to using a pre-trained single modality network and fine-tuning just the fusion module. The best performing model is the pre-trained transformer-based late fusion model in which only the fusion module is fine-tuned, resulting in 0.900 validation AUROC.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/transformer_table.png" alt="transformer"/>
+  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/transformer_table.png"
+       alt="transformer"
+       loading="lazy"
+       style="max-width: 900px; width: 70%; height: auto;" />
   <figcaption>Figure 2: Late fusion transformer method used for prediction fusion and late representation fusion.</figcaption>
 </figure>
 
@@ -98,7 +107,10 @@ Late fusion experiment results are shown in Table 1. Column headers "End-to-end"
 An ubiquitous factor that hinders performance across all our experiments is the imbalance between learning from the two modalities (Wu et al., 2020). Figure 3 shows sample learning curves for a prediction fusion model that demonstrates the imbalanced learning process. The three charts depicted in the figure are associated with validation AUROC for the fused class prediction, the mammography network class prediction, and the ultrasound network class prediction. All the networks are trained simultaneously in this scenario with one learning rate. It appears that the performance of the fused prediction plateaus. Note that there are two opposing factors that lead to this plateau behavior; past 15 epochs (1) the mammography network performance increases, while (2) the ultrasound network performance decreases. It appears that the point of overfitting occurs much earlier in the ultrasound network in comparison to the mammography network. We suspect that one of the culprits of the imbalanced training is the training data distribution. The training data has many more mammography exams than ultrasound exams which likely contributes to imbalanced training between the two modalities (329,709 mammography exams vs. 96,358 ultrasound exams). This may be remedied by using different learning rates for different parts of the multi-modal network such that the point of overfitting for each part of the network coincide.
 
 <figure align="center">
-  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/imbalance.png" alt="imbalance"/>
+  <img src="https://erasromani.github.io/multimodal-breast-cancer-detection/images/imbalance.png"
+       alt="imbalance"
+       loading="lazy"
+       style="max-width: 950px; width: 80%; height: auto;" />
   <figcaption>Figure 3: Sample learning curves for end-to-end training of a prediction fusion model. Each curve represents a different set of hyperparameters. (left) validation AUROC of fused prediction, (middle) validation AUROC of mammography network prediction, (right) validation AUROC of ultrasound network.</figcaption>
 </figure>
 

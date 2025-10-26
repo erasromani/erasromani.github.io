@@ -3,7 +3,7 @@ layout: page
 title: Energy-Based Models for Grasp Planning
 description: Bridging the gap between grasp sampling, evaluation, and refinement.
 img: /assets/img/projects/grasp-planning.png
-importance: 3
+importance: 4
 category: research
 ---
 

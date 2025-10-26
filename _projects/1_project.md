@@ -3,7 +3,7 @@ layout: page
 title: Indication Classification
 description: NLP for classifying MRI radiology reports into clinical indications
 img: /assets/img/projects/clinical_indication.png
-importance: 1
+importance: 2
 category: research
 scholar:
   group_by: none
