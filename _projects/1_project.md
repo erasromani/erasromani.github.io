@@ -124,3 +124,7 @@ Given that we are working with private patient data, it is not possible to have 
 ---
 
 [^code-link]: Code for our work is available on GitHub: [https://github.com/erasromani/indication_classification](https://github.com/erasromani/indication_classification)
+
+[^pubmed]: [https://www.ncbi.nlm.nih.gov/pubmed](https://www.ncbi.nlm.nih.gov/pubmed)
+
+[^pmc]: [https://www.ncbi.nlm.nih.gov/pmc](https://www.ncbi.nlm.nih.gov/pmc)
