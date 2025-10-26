@@ -3,7 +3,7 @@ layout: page
 title: Multimodal Breast Cancer Detection
 description: Leveraging multiple modalities to reduce the false negative rate in breast cancer screening with AI.
 img: /assets/img/projects/multimodal-breast.png
-importance: 2
+importance: 4
 category: research
 ---
 
