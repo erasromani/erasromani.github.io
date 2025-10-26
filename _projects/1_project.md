@@ -111,12 +111,6 @@ We would like to thank **Jan Witowski** for providing a clinical perspective to 
 
 ---
 
-### Collaboration Statement
-
-Given that we are working with private patient data, it is not possible to have members in this team without authorized access to the data. The process for gaining access to this data is long; hence this team has one team member. A medical postdoc from NYU Grossman School of Medicine, Jan Witowski, provided data labeling support. Note that Sam Bowman has already been notified about the circumstance and has approved it.
-
----
-
 ### References
 
 {% bibliography --file references --cited %}
