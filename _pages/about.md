@@ -28,4 +28,4 @@ I am a second-year Ph.D. student at the [NYU Center for Data Science](https://cd
 
 Prior to starting the Ph.D., I led product development as the CTO and co-founder of [Tethys AI](https://www.tethys.ai/), a healthcare technology startup. I also hold an M.S. in Data Science from [NYU](https://cds.nyu.edu/) and a B.S. in Engineering Physics from [Cornell University](https://www.engineering.cornell.edu/aep/).
 
-Outside of research, I enjoy scuba diving and sailing.
+Outside of research, I enjoy scuba diving, sailing, and music production.
