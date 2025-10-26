@@ -1,81 +1,79 @@
 ---
 layout: page
-title: project 2
-description: a project with a background image and giscus comments
-img: assets/img/3.jpg
+title: Robotic Simulation
+description: Python wrapper for NVIDIA Omniverse Isaac-Sim
+img: /assets/img/projects/isaac-sim.png
 importance: 2
-category: work
-giscus_comments: true
+category: research
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+## Motivation
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+Before a robot ever touches a real object, it must first learn to interact safely in simulation.  
+Robotic grasping — especially in cluttered environments — is one of the most challenging tasks in manipulation. It requires reasoning about geometry, contact forces, and control precision.
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
+High-fidelity physics simulators like **NVIDIA Omniverse Isaac-Sim** make it possible to replicate these interactions at scale, but their interfaces are often complex and difficult to extend. I built **isaac-sim-python** as a flexible Python layer on top of Isaac-Sim, designed to make it _easy to prototype and visualize grasp executions programmatically._
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
-</div>
+---
 
-You can also put regular text between your rows of images.
-Say you wanted to write a little bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, _bled_ for your project, and then... you reveal its glory in the next row of images.
+## From API Complexity to Expressive Simulation
 
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
+Isaac-Sim provides an incredibly detailed robotics simulation stack — realistic lighting, material physics, GPU-accelerated rendering, and reinforcement learning integration. Yet, scripting even simple tasks like moving a robotic arm or spawning random objects often requires verbose, boilerplate-heavy code.
 
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
+The **isaac-sim-python** package abstracts that complexity.  
+With a few lines of Python, you can initialize a Panda robotic arm, drop random objects into a bin, and simulate planar grasps from configurable positions and orientations.
 
-{% raw %}
+The result is a framework that allows for:
 
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
+- **Rapid experimentation** with grasp configurations and object types.
+- **Automated scene generation** with randomized layouts for learning-based methods.
+- **Video rendering** of simulated grasps for analysis or presentation.
 
-{% endraw %}
+---
+
+## The Simulation
+
+Each run begins with the Panda robotic arm suspended above a bin of randomized rigid objects.  
+The simulation then executes a **planar grasp** — positioning the gripper over the target area, rotating to the desired approach angle, and descending smoothly to make contact.
+
+The grasp succeeds or fails depending on the object geometry, mass, and surface friction parameters defined in the scene.  
+A recording module captures the simulation and exports it as a short video clip, creating a visually intuitive way to debug or benchmark grasp behavior.
+
+---
+
+## Insights
+
+Developing this wrapper highlighted the trade-offs between **simulation realism** and **control simplicity**.  
+While Isaac-Sim offers unparalleled physical fidelity, it requires meticulous configuration to behave predictably across randomized runs.
+
+Some of the key lessons:
+
+- Scene initialization order and object mass scaling significantly influence simulation stability.
+- Frame synchronization is essential when rendering videos at real-time frame rates.
+- Small perturbations in grasp angle can produce large variations in outcome — an important property when training reinforcement learning policies.
+
+These insights have shaped how I think about designing simulation pipelines for robotic learning — emphasizing **modularity**, **observability**, and **repeatability**.
+
+---
+
+## Looking Ahead
+
+This project is an early step toward a broader goal: building simulation pipelines that bridge **robotic perception, grasp planning, and learning-based control**.  
+Future directions include:
+
+- Integrating tactile feedback and force sensors into the simulation loop.
+- Using reinforcement learning to optimize grasp success rates across randomized object distributions.
+- Extending the wrapper for multi-object reasoning and cluttered manipulation tasks.
+
+---
+
+## Repository
+
+The full implementation and source code are available here:  
+👉 [**GitHub — erasromani/isaac-sim-python**](https://github.com/erasromani/isaac-sim-python)
+
+---
+
+### Acknowledgments
+
+Developed as part of ongoing research exploring simulation-based learning for robotic manipulation and grasp optimization.
