@@ -2,9 +2,12 @@
 layout: page
 title: Few-Shot Learning for Indication Classification
 description: A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting
-img: /assets/img/projects/clinical_indications.png
+img: /assets/img/projects/clinical_indication.png
 importance: 1
 category: research
+scholar:
+  group_by: none
+  group_order: none
 ---
 
 ## Abstract
@@ -112,6 +115,10 @@ Given that we are working with private patient data, it is not possible to have 
 
 ---
 
+### References
+
 {% bibliography --file references --cited %}
 
-[^code-link]: Code for our work is available on GitHub: https://github.com/erasromani/indication_classification
+---
+
+[^code-link]: Code for our work is available on GitHub: [https://github.com/erasromani/indication_classification](https://github.com/erasromani/indication_classification)
