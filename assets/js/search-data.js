@@ -41,7 +41,7 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "projects-few-shot-learning-for-indication-classification",
           title: 'Few-Shot Learning for Indication Classification',
-          description: "A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting.",
+          description: "A natural language processing system to classify breast MRI radiology reports into clinical indication categories in a true few-shot learning setting",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
             },},{id: "projects-project-2",
