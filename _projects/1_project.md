@@ -43,7 +43,7 @@ The radiology report dataset is provided by NYU Langone. There are 47,966 MRI re
 
 We start with a heuristic approach which uses regular expressions to classify labels based on patterns present in the reports. This is a baseline we use to compare against other approaches. We then finetune a pretrained Clinical BioBERT network with a classification head {% cite alsentzer2019clinicalbert --file references %}. Given that the max length for a sequence that Clinical BioBERT can process is 512 tokens, we implement several strategies to handle documents with lengths greater than 512. One approach is to simply truncate the sequence. Another method uses a sliding window approach, in which each window is processed separately by Clinical BioBERT and the intermediate representations or the class predictions are aggregated through an aggregation function. We have implemented four different aggregation functions for sliding window: mean, max, mean/max, and attention.
 
-The mean/max aggregation (from {% cite huang2019b --file references %}) is:
+The mean/max aggregation (from {% cite huang2019 --file references %}) is:
 
 $$
 S \;=\; \frac{S_{\max}^{(K)} \;+\; S_{\text{mean}}^{(K)} \,\frac{K}{c}}{1 + \frac{K}{c}}
